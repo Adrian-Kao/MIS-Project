@@ -2,7 +2,12 @@
     // === Interactive vector grasshopper with rider (no images, no path, no spring) ===
 
     let rig;
-
+    let bgImg;
+  
+  
+    function preload() {
+    bgImg = loadImage('background.jpg');
+    }
     function setup() {
       const cnv = createCanvas(windowWidth, windowHeight); // wide canvas
       cnv.parent('sketch');
@@ -11,6 +16,9 @@
 
     function draw() {
       background(17);
+    if (bgImg) {
+      image(bgImg, 0, 0, width, height); // 把圖片鋪滿整個畫布
+    }
       const dt = min(1/30, deltaTime / 1000);
       rig.update(dt);
       rig.draw();
