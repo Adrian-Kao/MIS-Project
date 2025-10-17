@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sketch</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+
+      background-color: #111;
+      height: 100%;
+    }
+
+    main {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background-color: #111;
+    }
+
+    canvas {
+      display: block;
+      /* margin: auto auto; */
+
+      padding: 0;
+      border: 0;
+    }
+  </style>
+  <script src="libraries/fxhash.js"></script>
+  <script src="libraries/p5.min.js"></script>
+  <script>
+    function fxpreview() {
+      $fx.preview();
+      console.log('FXPREVIEW');
+    }
+  </script>
+</head>
+
+<body>
+  <main id="sketch"></main>
+  <script src="sketch.js"></script>
+</body>
+
+</html>
