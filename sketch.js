@@ -40,7 +40,7 @@
       constructor(p){
         this.pos = p.copy();
         this.target = p.copy();
-        this.speed = 600;
+        this.speed = 800;
         this.boost = 1.6;
         this.angle = 0;
         this.size = 120;
