@@ -78,7 +78,7 @@ let stories = {}; // stories["Telescope"] 會是一個字串陣列（每行一�
 function preload() {
     bgImg = loadImage('map.jpg');
 
-    jumpSound = loadSound('/sounds/hop.mp4');
+    jumpSound = loadSound('sounds/hop.mp4');
 
     // 🔊 每個景點的口述音檔
     narrationSounds["School"] = loadSound('audio/school.m4a');
