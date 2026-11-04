@@ -1,39 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#80a95d" />
 
-  <title>Sketch</title>
+  <title>永安秘境探索</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      border: 0;
+    :root {
+      --cream: #fff6d9;
+      --ink: #4f3b22;
+    }
 
-      background-color: #111;
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #6f9550;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      width: 100%;
       height: 100%;
     }
 
-    main {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
+    .screen[hidden] {
+      display: none;
+    }
+
+    /* 首頁 */
+    #home-screen {
+      isolation: isolate;
+      display: grid;
+      place-items: start center;
+      overflow: hidden;
+      background-color: #9bc16f;
+      background-image:
+        linear-gradient(180deg, rgba(99, 139, 67, 0.05), rgba(55, 91, 38, 0.12)),
+        url("assets/home-hero-simple.png");
+      background-position: center;
+      background-size: cover;
+    }
+
+    #home-screen::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 27%, rgba(255, 248, 213, 0.18), transparent 40%);
+    }
+
+    .home-content {
+      width: min(94vw, 1120px);
+      margin-top: clamp(54px, 9vh, 112px);
+      text-align: center;
+      animation: home-arrive 900ms cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
       align-items: center;
+      gap: 18px;
+      margin: 0 0 10px;
+      color: rgba(255, 250, 226, 0.96);
+      font-size: clamp(16px, 1.7vw, 25px);
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      text-shadow: 0 2px 8px rgba(53, 77, 38, 0.3);
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      width: clamp(32px, 5vw, 70px);
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--cream);
+      font-size: clamp(54px, 8.3vw, 126px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.06;
+      text-wrap: balance;
+      text-shadow:
+        0 5px 0 rgba(93, 112, 59, 0.18),
+        0 12px 28px rgba(48, 74, 33, 0.26);
+    }
+
+    .tagline {
+      margin: 18px auto 0;
+      color: rgba(255, 250, 226, 0.94);
+      font-size: clamp(16px, 1.8vw, 26px);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-shadow: 0 2px 8px rgba(53, 77, 38, 0.32);
+    }
+
+    .start-wrap {
+      position: relative;
+      display: inline-block;
+      margin-top: clamp(38px, 7vh, 76px);
+    }
+
+    .start-wrap::after {
+      position: absolute;
+      top: 78%;
+      left: 50%;
+      z-index: -1;
+      width: 42px;
+      height: 135px;
+      border-radius: 0 0 8px 8px;
+      background: linear-gradient(90deg, #6e4d2e, #987047 52%, #68482b);
+      box-shadow: 0 9px 14px rgba(49, 73, 32, 0.18);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .start-button {
+      position: relative;
+      min-width: min(78vw, 430px);
+      padding: 22px 66px 24px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 22px 42px 42px 22px;
+      color: var(--ink);
+      background: linear-gradient(135deg, #fff1ad 0%, #ffdf77 62%, #f7cc5e 100%);
+      box-shadow:
+        0 9px 0 rgba(125, 89, 42, 0.22),
+        0 17px 28px rgba(47, 72, 31, 0.25),
+        inset 0 3px 0 rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      font-size: clamp(28px, 3.2vw, 47px);
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+    }
+
+    .start-button::before,
+    .start-button::after {
+      position: absolute;
+      left: 0;
+      width: 42px;
+      height: 5px;
+      border-radius: 0 999px 999px 0;
+      background: rgba(135, 93, 38, 0.22);
+      content: "";
+    }
+
+    .start-button::before {
+      top: 25%;
+    }
+
+    .start-button::after {
+      bottom: 23%;
+      width: 28px;
+    }
+
+    .start-button:hover {
+      filter: brightness(1.05) saturate(1.04);
+      box-shadow:
+        0 7px 0 rgba(125, 89, 42, 0.22),
+        0 20px 34px rgba(47, 72, 31, 0.3),
+        inset 0 3px 0 rgba(255, 255, 255, 0.65);
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .start-button:active {
+      box-shadow:
+        0 3px 0 rgba(125, 89, 42, 0.22),
+        0 10px 18px rgba(47, 72, 31, 0.22),
+        inset 0 3px 0 rgba(255, 255, 255, 0.55);
+      transform: translateY(3px);
+    }
+
+    .start-button:focus-visible,
+    .home-button:focus-visible {
+      outline: 4px solid rgba(255, 250, 226, 0.96);
+      outline-offset: 5px;
+    }
+
+    /* 互動地圖 */
+    #explore-screen {
+      background: #111;
+    }
+
+    #sketch {
+      display: flex;
       width: 100%;
       height: 100%;
-      background-color: #111;
+      align-items: center;
+      justify-content: center;
     }
 
     canvas {
       display: block;
-      /* margin: auto auto; */
-
       padding: 0;
       border: 0;
     }
+
+    .home-button {
+      position: fixed;
+      top: max(18px, env(safe-area-inset-top));
+      left: max(18px, env(safe-area-inset-left));
+      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 19px;
+      border: 2px solid rgba(255, 255, 255, 0.48);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255, 246, 217, 0.92);
+      box-shadow: 0 7px 20px rgba(25, 40, 20, 0.24);
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      backdrop-filter: blur(8px);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .home-button:hover {
+      background: #fff8e4;
+      transform: translateY(-2px);
+    }
+
+    .home-button .arrow {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    @keyframes home-arrive {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      #home-screen {
+        background-position: 35% center;
+      }
+
+      .home-content {
+        margin-top: max(52px, 8vh);
+      }
+
+      h1 {
+        max-width: 92vw;
+        margin-inline: auto;
+        font-size: clamp(48px, 15vw, 78px);
+        letter-spacing: 0.03em;
+      }
+
+      .tagline {
+        width: 80vw;
+        line-height: 1.7;
+      }
+
+      .start-wrap {
+        margin-top: 34px;
+      }
+
+      .start-button {
+        min-width: min(78vw, 340px);
+        padding: 18px 34px 20px;
+      }
+
+      .home-button {
+        padding: 10px 15px;
+        font-size: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
+
   <script src="libraries/fxhash.js"></script>
   <script src="libraries/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/addons/p5.sound.min.js"></script>
@@ -47,8 +322,58 @@
 </head>
 
 <body>
-  <main id="sketch"></main>
+  <section id="home-screen" class="screen" aria-labelledby="home-title">
+    <div class="home-content">
+      <p class="eyebrow">地方探險故事</p>
+      <h1 id="home-title">永安秘境探索</h1>
+      <p class="tagline">跟著蚱蜢，一起發現山林裡的秘密</p>
+
+      <div class="start-wrap">
+        <button id="start-button" class="start-button" type="button">開始探索</button>
+      </div>
+    </div>
+  </section>
+
+  <main id="explore-screen" class="screen" hidden aria-label="永安秘境互動地圖">
+    <div id="sketch"></div>
+    <button id="home-button" class="home-button" type="button" aria-label="回到首頁">
+      <span class="arrow" aria-hidden="true">←</span>
+      <span>回到首頁</span>
+    </button>
+  </main>
+
   <script src="sketch.js"></script>
+  <script>
+    const homeScreen = document.getElementById('home-screen');
+    const exploreScreen = document.getElementById('explore-screen');
+    const startButton = document.getElementById('start-button');
+    const homeButton = document.getElementById('home-button');
+
+    function showExplore() {
+      homeScreen.hidden = true;
+      exploreScreen.hidden = false;
+
+      requestAnimationFrame(() => {
+        if (typeof resizeCanvas === 'function') {
+          resizeCanvas(window.innerWidth, window.innerHeight);
+        }
+        if (typeof loop === 'function') loop();
+        homeButton.focus({ preventScroll: true });
+      });
+    }
+
+    function showHome() {
+      exploreScreen.hidden = true;
+      homeScreen.hidden = false;
+
+      if (typeof stopAllNarrations === 'function') stopAllNarrations();
+      if (typeof noLoop === 'function') noLoop();
+      startButton.focus({ preventScroll: true });
+    }
+
+    startButton.addEventListener('click', showExplore);
+    homeButton.addEventListener('click', showHome);
+  </script>
 </body>
 
 </html>

@@ -145,7 +145,7 @@ function draw() {
         rig.update(dt);
 
         if (pendingSpot && !rig.isJumping && rig.altitude === 0) {
-            const d = dist(rig.pos.x, rig.pos.y, pendingSpot.x, pendingSpot.y);
+            const d = dist(rig.pos.x, rig.pos.y, rig.target.x, rig.target.y);
             if (d < 30 && !justArrived) {
                 justArrived = true;
                 triggerSpotUnlock(pendingSpot);
@@ -281,7 +281,8 @@ function mousePressed() {
         return false;
     }
 
-    // 原本地圖模式邏輯
+    // 地圖模式：任何滑鼠位置都可以成為蚱蜢的跳躍目標。
+    // 若落點位於景點範圍內，抵達後仍會觸發原本的解鎖流程。
     if (mode !== 'map') return;
     selectSpot(mouseX, mouseY);
 }
@@ -305,7 +306,7 @@ function mouseDragged() {
     }
 
     if (mode !== 'map') return;
-    rig.setTarget(mouseX, mouseY);
+    selectSpot(mouseX, mouseY);
 }
 
 function mouseReleased() {
@@ -326,11 +327,11 @@ function mouseWheel(event) {
 
 function touchStarted() {
     if (mode !== 'map') return false;
-    rig.setTarget(mouseX, mouseY);
+    selectSpot(mouseX, mouseY);
     return false;
 }
 
-// 選景點（矩形）
+// 設定跳躍落點，並判斷該位置是否位於景點範圍內。
 function selectSpot(mx, my) {
     let closest = null;
     let bestDist = 99999;
@@ -347,11 +348,9 @@ function selectSpot(mx, my) {
         }
     }
 
-    if (closest) {
-        pendingSpot = closest;
-        rig.setTarget(closest.x, closest.y);
-        justArrived = false;
-    }
+    pendingSpot = closest;
+    rig.setTarget(mx, my);
+    justArrived = false;
 }
 
 // 鍵盤
@@ -415,8 +414,7 @@ class RiderBug {
     cycleGait() { this.gaitIndex = (this.gaitIndex + 1) % this.gaitStyles.length; }
 
     setTarget(x, y) {
-        const pad = this.size * 0.35;
-        this.target.set(constrain(x, pad, width - pad), constrain(y, pad, height - pad));
+        this.target.set(constrain(x, 0, width), constrain(y, 0, height));
     }
 
     update(dt) {
