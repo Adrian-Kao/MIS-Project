@@ -209,7 +209,6 @@ function draw() {
     drawChest(dt);
 
     // HUD 只在地圖
-    if (mode === 'map') drawHUD();
 }
 
 // 解鎖動畫
@@ -564,22 +563,6 @@ class RiderBug {
         line(s * 0.06, -s * 0.04, s * 0.36, -s * 0.06);
         pop();
     }
-}
-
-// HUD
-function drawHUD() {
-    const g = rig.currentGait();
-    push();
-    noStroke();
-    fill(0, 100);
-    rect(10, 10, 320, 90, 8);
-    fill(220);
-    textSize(12);
-    text(`speed: ${rig.speed.toFixed(0)} px/s  (hold mouse = x${rig.boost})`, 20, 30);
-    text(`gait: ${g.name}  |  hop: ${rig.hopOn ? 'on' : 'off'}`, 20, 50);
-    text(`status: ${rig.isJumping ? 'JUMPING!' : 'Ground'} | Alt: ${(-rig.altitude).toFixed(0)} px`, 20, 70);
-    text(`Arrow keys to move`, 20, 86);
-    pop();
 }
 
 // 解鎖字動畫
