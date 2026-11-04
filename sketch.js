@@ -58,15 +58,17 @@ let chest = {
     t: 0
 };
 
-// === Map Spots（錨點 + 可點矩形區域） ===
+// === Map Spots（相對於地圖寬高的錨點 + 可點矩形區域） ===
+// nx / ny 是景點中心，nrx / nry 是觸發半徑；全部使用 0～1 的比例，
+// 避免瀏覽器尺寸改變後，固定像素座標跑到畫面外。
 const spots = [
-    { name: "Telescope", label: "千島湖觀賞點", x: 300, y: 900, rx: 120, ry: 90, unlocked: false },
-    { name: "Trees", label: "白石坡道", x: 780, y: 600, rx: 130, ry: 80, unlocked: false },
-    { name: "Village", label: "失落村莊", x: 1300, y: 800, rx: 130, ry: 80, unlocked: false },
-    { name: "Bridge", label: "木造樓梯", x: 1600, y: 330, rx: 120, ry: 100, unlocked: false },
-    { name: "School", label: "永安國小", x: 1950, y: 180, rx: 130, ry: 80, unlocked: false },
-    { name: "Shop", label: "茶行", x: 1950, y: 1000, rx: 110, ry: 70, unlocked: false },
-    { name: "wall", label: "彩繪牆", x: 1065, y: 270, rx: 120, ry: 100, unlocked: false }
+    { name: "Telescope", label: "千島湖觀賞點", nx: 0.145, ny: 0.800, nrx: 0.105, nry: 0.135, unlocked: false },
+    { name: "Trees", label: "白石坡道", nx: 0.370, ny: 0.535, nrx: 0.095, nry: 0.085, unlocked: false },
+    { name: "Village", label: "失落村莊", nx: 0.620, ny: 0.715, nrx: 0.125, nry: 0.105, unlocked: false },
+    { name: "Bridge", label: "木造樓梯", nx: 0.745, ny: 0.275, nrx: 0.110, nry: 0.120, unlocked: false },
+    { name: "School", label: "永安國小", nx: 0.915, ny: 0.140, nrx: 0.095, nry: 0.100, unlocked: false },
+    { name: "Shop", label: "茶行", nx: 0.915, ny: 0.890, nrx: 0.090, nry: 0.105, unlocked: false },
+    { name: "wall", label: "彩繪牆", nx: 0.490, ny: 0.215, nrx: 0.095, nry: 0.085, unlocked: false }
 ];
 
 let pendingSpot = null; // 目前正要前往的景點
@@ -331,15 +333,25 @@ function touchStarted() {
 }
 
 // 設定跳躍落點，並判斷該位置是否位於景點範圍內。
+function getSpotScreenArea(spot) {
+    return {
+        x: spot.nx * width,
+        y: spot.ny * height,
+        rx: spot.nrx * width,
+        ry: spot.nry * height
+    };
+}
+
 function selectSpot(mx, my) {
     let closest = null;
     let bestDist = 99999;
 
     for (let sp of spots) {
-        const inX = mx >= sp.x - sp.rx && mx <= sp.x + sp.rx;
-        const inY = my >= sp.y - sp.ry && my <= sp.y + sp.ry;
+        const area = getSpotScreenArea(sp);
+        const inX = mx >= area.x - area.rx && mx <= area.x + area.rx;
+        const inY = my >= area.y - area.ry && my <= area.y + area.ry;
         if (inX && inY) {
-            const d = dist(mx, my, sp.x, sp.y);
+            const d = dist(mx, my, area.x, area.y);
             if (d < bestDist) {
                 bestDist = d;
                 closest = sp;
@@ -568,10 +580,11 @@ class RiderBug {
 // 解鎖字動畫
 function drawUnlockAnimation(spot, p) {
     if (!spot) return;
+    const area = getSpotScreenArea(spot);
     let scaleV = easeOutBack(min(p * 1.2, 1));
     let alpha = constrain(p * 2, 0, 1) * 255;
     push();
-    translate(spot.x, spot.y - 80);
+    translate(area.x, area.y - 80);
     scale(scaleV);
     textAlign(CENTER, CENTER);
     textSize(40);
@@ -928,7 +941,8 @@ function drawDebugRegions() {
     strokeWeight(2);
     rectMode(CENTER);
     for (let sp of spots) {
-        rect(sp.x, sp.y, sp.rx * 2, sp.ry * 2);
+        const area = getSpotScreenArea(sp);
+        rect(area.x, area.y, area.rx * 2, area.ry * 2);
     }
     pop();
 }
